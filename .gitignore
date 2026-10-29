@@ -1,0 +1,27 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local build and temporary files
+tmp/
+**/.build/
+*.log
+*.zip
+
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+*비밀번호*
+*아이디*
+*password*
+*secret*
+*token*
+
+# Private business documents
+*통장사본*
+*사업자등록증*
+*고객정보*
