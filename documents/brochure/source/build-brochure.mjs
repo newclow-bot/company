@@ -1,16 +1,42 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
-import { Presentation, PresentationFile } from "@oai/artifact-tool";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { execFileSync } from "node:child_process";
 
-const workspaceDir = "C:/Users/PC/Desktop/qbridge";
-const brochureDir = path.join(workspaceDir, "brochure");
-const assetsDir = path.join(brochureDir, "assets");
+const sourceDir = path.dirname(fileURLToPath(import.meta.url));
+const brochureDir = path.resolve(sourceDir, "..");
+const workspaceDir = path.resolve(brochureDir, "../..");
+const assetsDir = path.join(sourceDir, "assets");
 const buildDir = path.join(brochureDir, ".build");
-const deliverablesDir = path.join(workspaceDir, "deliverables");
-const skillDir = "C:/Users/PC/.codex/plugins/cache/openai-primary-runtime/presentations/26.1011.11113/skills/presentations";
-const runtimePython = "C:/Users/PC/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe";
+// Keep generated files separate from the reviewed, committed deliverables.
+const deliverablesDir = path.join(buildDir, "output");
+const skillDir = process.env.PRESENTATIONS_SKILL_DIR;
+const runtimePython = process.env.BROCHURE_PYTHON || "python";
+const soffice = process.env.LIBREOFFICE_BIN || "soffice";
 const finalPptx = path.join(deliverablesDir, "퀼브릿지_회사소개_브로슈어_3차.pptx");
+const finalPdf = path.join(deliverablesDir, "퀼브릿지_회사소개_브로슈어_메일용_3차.pdf");
+
+if (!skillDir) throw new Error("PRESENTATIONS_SKILL_DIR에 presentations 스킬 폴더를 지정하세요. README의 재제작 방법을 참고하세요.");
+await fs.access(path.join(skillDir, "container_tools/artifact_tool_utils.mjs"));
+for (const name of ["qualbridge-logo.png", "qualbridge-logo-transparent.png", "qualbridge-industrial-hero.png", "valves-fittings.png", "mro-supplies.png"]) {
+  await fs.access(path.join(assetsDir, name));
+}
+execFileSync(runtimePython, ["--version"], { stdio: "pipe" });
+execFileSync(soffice, ["--version"], { stdio: "pipe" });
+const artifactModule = process.env.ARTIFACT_TOOL_MODULE;
+const { Presentation, PresentationFile } = await import(
+  artifactModule ? pathToFileURL(path.resolve(artifactModule)).href : "@oai/artifact-tool"
+);
+if (process.argv.includes("--check")) {
+  console.log("브로슈어 경로, 이미지, Python, LibreOffice, 제작 모듈 확인 완료");
+  process.exit(0);
+}
+try {
+  await fs.access(finalPptx);
+  throw new Error(`기존 생성 결과가 있습니다. 검토 후 이동하거나 삭제하세요: ${deliverablesDir}`);
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+}
 const fontFamily = "Noto Sans KR";
 
 const C = {
@@ -275,7 +301,7 @@ const montage = await presentation.export({ format: "webp", montage: true });
 await fs.writeFile(path.join(buildDir, "brochure-montage.webp"), new Uint8Array(await montage.arrayBuffer()));
 
 const { finalizePresentation } = await import(pathToFileURL(path.join(skillDir, "container_tools/artifact_tool_utils.mjs")).href);
-const stagingDir = path.join(brochureDir, ".codex-finalizer");
+const stagingDir = path.join(buildDir, "finalizer");
 await fs.mkdir(stagingDir, { recursive: true });
 const candidatePath = path.join(stagingDir, "candidate.pptx");
 await (await PresentationFile.exportPptx(presentation)).save(candidatePath);
@@ -300,4 +326,15 @@ await finalizePresentation({
   receiptPath: path.join(stagingDir, "qualbridge-brochure-v3.validation.json"),
 });
 
-console.log(JSON.stringify({ finalPptx, slideCount: presentation.slides.items.length, montage: path.join(buildDir, "brochure-montage.webp") }));
+// Convert the validated PPTX, using an isolated LibreOffice profile.
+const pdfDir = await fs.mkdtemp(path.join(buildDir, "pdf-"));
+execFileSync(soffice, [
+  `-env:UserInstallation=${pathToFileURL(path.join(pdfDir, "profile")).href}`,
+  "--headless", "--convert-to", "pdf:impress_pdf_Export",
+  "--outdir", pdfDir, finalPptx,
+], { stdio: "inherit", timeout: 120000 });
+const convertedPdf = path.join(pdfDir, path.basename(finalPptx, ".pptx") + ".pdf");
+const pdfBytes = await fs.readFile(convertedPdf);
+if (pdfBytes.subarray(0, 5).toString() !== "%PDF-") throw new Error("PDF 변환 결과가 올바르지 않습니다.");
+await fs.copyFile(convertedPdf, finalPdf);
+console.log(JSON.stringify({ finalPptx, finalPdf, slideCount: presentation.slides.items.length, montage: path.join(buildDir, "brochure-montage.webp") }));

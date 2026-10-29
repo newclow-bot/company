@@ -1,0 +1,37 @@
+name: Brochure PDF
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'documents/brochure/*.pptx'
+      - 'documents/brochure/source/export-pdf.py'
+      - '.github/workflows/brochure.yml'
+  pull_request:
+    paths:
+      - 'documents/brochure/*.pptx'
+      - 'documents/brochure/source/export-pdf.py'
+      - '.github/workflows/brochure.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PDF converter and Korean fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-impress fonts-noto-cjk python3-pypdf
+      - name: Export PDF from committed PPTX
+        run: python3 documents/brochure/source/export-pdf.py
+      - name: Upload PPTX and PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: qualbridge-brochure-${{ github.run_number }}
+          path: documents/brochure/.build/github-output/*
+          if-no-files-found: error
+          retention-days: 30
