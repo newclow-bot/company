@@ -26,29 +26,29 @@
         <div class="quote-intro">
           <p class="eyebrow dark">CONTACT US</p>
           <h2 id="quote-title">견적문의 안내</h2>
-          <p>아래 내용을 입력하면 메일 프로그램에 견적문의 초안이 생성됩니다. 도면이나 사진, 품목표는 메일에 직접 첨부해 주세요.</p>
+          <p>아래 내용을 작성하고 전송하면 회사 메일로 견적문의가 전달됩니다. 도면이나 사진, 품목표는 qbridge3@naver.com으로 별도 보내 주세요.</p>
           <dl class="contact-list">
             <div><dt>이메일</dt><dd><a href="mailto:qbridge3@naver.com">qbridge3@naver.com</a></dd></div>
-            <div><dt>운영시간</dt><dd>평일 09:00–18:00</dd></div>
+            <div><dt>전화</dt><dd><a href="tel:01077572096">010-7757-2096</a></dd></div><div><dt>팩스</dt><dd>0504-332-2096</dd></div><div><dt>운영시간</dt><dd>평일 09:00–18:00</dd></div>
             <div><dt>주소</dt><dd>서울특별시 구로구 경인로54길 4, H동 106호</dd></div>
           </dl>
         </div>
-        <form class="quote-form" id="quote-form">
+        <form class="quote-form" id="quote-form" action="/api/quote" method="POST"><input type="text" name="website" hidden tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="form-row"><label>회사명<input name="company" autocomplete="organization" required></label><label>담당자명<input name="name" autocomplete="name" required></label></div>
           <div class="form-row"><label>연락처<input name="phone" autocomplete="tel" required></label><label>회신 이메일<input name="email" type="email" autocomplete="email" required></label></div>
           <label>문의 품목<input name="item" placeholder="예: 버터플라이밸브, A4 용지" required></label>
           <div class="form-row"><label>규격·모델명<input name="spec" placeholder="알고 있는 범위에서 입력"></label><label>수량<input name="quantity" placeholder="예: 10 EA"></label></div>
           <label>희망 납기<input name="due" placeholder="예: 2026년 11월 중"></label>
           <label>상세 요청사항<textarea name="message" rows="5" placeholder="재질, 압력 등급, 납품 장소 등 필요한 내용을 입력해 주세요."></textarea></label>
-          <label class="consent"><input type="checkbox" required><span>견적 회신을 위해 입력 정보를 이메일로 전달하는 것에 동의합니다.</span></label>
-          <button class="button button-dark" type="submit">이메일로 견적문의 작성</button>
-          <p class="form-note">입력 내용은 이 사이트에 저장되지 않습니다. 버튼을 누른 뒤 열리는 메일에서 전송을 완료해 주세요.</p>
-        </form>
+          <label class="consent"><input type="checkbox" name="consent" required><span>견적 회신을 위해 입력한 연락처와 문의 내용을 메일 발송 서비스를 통해 퀼브릿지에 전달하는 것에 동의합니다.</span></label>
+          <button class="button button-dark" type="submit">견적문의 전송</button>
+          <p class="form-note">전송 결과를 이 화면에서 안내합니다. 접수가 완료되지 않으면 전화 또는 이메일로 문의해 주세요.</p>
+          <p id="quote-status" class="form-note" role="status" aria-live="polite"></p><noscript><p>견적문의 전송에는 자바스크립트가 필요합니다. 전화 010-7757-2096 또는 qbridge3@naver.com으로 문의해 주세요.</p></noscript></form>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="shell footer-main"><div class="footer-brand"><b>QUALBRIDGE</b><strong>퀼브릿지</strong><span>Bridging Quality to the World</span></div><div class="footer-info"><p><span>대표자</span>김건희</p><p><span>주소</span>서울특별시 구로구 경인로54길 4, H동 106호</p><p><span>이메일</span><a href="mailto:qbridge3@naver.com">qbridge3@naver.com</a></p><p><span>운영시간</span>평일 09:00–18:00</p><p><span>전화 · 팩스</span>추후 안내</p></div><nav class="footer-nav" aria-label="하단 메뉴"><a href="about.html">회사소개</a><a href="products.html">취급품목</a><a href="process.html">거래절차</a><a href="quote.html">견적문의</a></nav></div><div class="shell footer-bottom"><p>좋은 제품을 연결하고, 끝까지 책임지는 기업.</p><p class="copyright">© <span id="year"></span> QUALBRIDGE. All rights reserved.</p></div></footer>
+  <footer class="site-footer"><div class="shell footer-main"><div class="footer-brand"><b>QUALBRIDGE</b><strong>퀼브릿지</strong><span>Bridging Quality to the World</span></div><div class="footer-info"><p><span>대표자</span>김건희</p><p><span>주소</span>서울특별시 구로구 경인로54길 4, H동 106호</p><p><span>이메일</span><a href="mailto:qbridge3@naver.com">qbridge3@naver.com</a></p><p><span>운영시간</span>평일 09:00–18:00</p><p><span>전화</span><a href="tel:01077572096">010-7757-2096</a></p><p><span>팩스</span>0504-332-2096</p></div><nav class="footer-nav" aria-label="하단 메뉴"><a href="about.html">회사소개</a><a href="products.html">취급품목</a><a href="process.html">거래절차</a><a href="quote.html">견적문의</a></nav></div><div class="shell footer-bottom"><p>좋은 제품을 연결하고, 끝까지 책임지는 기업.</p><p class="copyright">© <span id="year"></span> QUALBRIDGE. All rights reserved.</p></div></footer>
   <script src="script.js"></script>
 </body>
 </html>
