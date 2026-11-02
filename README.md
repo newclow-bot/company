@@ -113,8 +113,19 @@ PDF는 검증된 PPTX를 LibreOffice로 변환합니다. 변환 실패 시 명�
 
 ## 홈페이지 견적문의 서버
 
-견적폼은 메일 프로그램 대신 같은 출처의 `/api/quote`로 내용을 보내며, 서버가 Brevo API로 `qbridge3@naver.com`에 전달합니다.
+견적폼은 메일 프로그램 대신 `https://qualbridge-quote-api.newclow.workers.dev/api/quote`로 내용을 보내며, 서버가 Brevo API로 `qbridge3@naver.com`에 전달합니다.
 전화는 010-7757-2096, 팩스는 0504-332-2096입니다.
 회사 전용 도메인은 필수가 아니며, 발신 이메일 인증과 메일 서비스 API 키 설정이 필요합니다.
 실행 방법과 남은 운영 설정은 [서버 안내](website/server/README.md)를 참고하세요.
-현재 Sites 설정은 정적 배포이므로 서버 API 운영 연결과 배포 전에는 실제 문의 수신을 사용할 수 없습니다.
+Cloudflare Worker는 배포됐으며 2026-11-02 모의 문의에서 서비스 접수 성공(`ok: true`)을 확인했습니다.
+이는 메일함 도착 확인과 다릅니다. 운영 홈페이지 변경본 배포와 브라우저 문의 테스트는 별도로 남아 있습니다.
+2026-11-02 운영 URL 점검 시 ChatGPT 로그인 안내가 표시됐으므로 외부 고객 공개 접근 여부도 확인해야 합니다.
+
+## 2026-11-02 회사소개서
+
+`documents/brochure/output-20261102/`에 홈페이지 내용과 연락처를 맞춘 6페이지 PPTX 및 배포용 PDF를 보관합니다.
+기존 3차 파일은 그대로 보존합니다. 새 PPTX는 기존 도형·이미지와 편집 가능한 텍스트를 유지합니다.
+이번 PDF는 렌더러 호환 문제로 검수한 슬라이드 화면을 담은 **이미지 PDF**이며 텍스트 선택·검색은 지원하지 않습니다.
+일반 텍스트 PDF가 필요하면 PPTX를 PowerPoint 또는 LibreOffice에서 PDF로 내보내세요.
+날짜별 업데이트 소스는 `documents/brochure/source/update-brochure-20261102.mjs`입니다.
+기존 `Brochure PDF` 워크플로는 루트의 3차 PPTX를 변환하므로 날짜별 결과를 자동으로 변환하지 않습니다.
