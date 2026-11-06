@@ -4,7 +4,7 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (request.method === 'GET' && url.pathname === '/') {
-      return Response.json({ service: 'QUALBRIDGE quote API', configured: Boolean(env.BREVO_API_KEY && env.MAIL_FROM && env.SITE_ORIGIN) });
+      return Response.json({ service: 'QUALBRIDGE quote API', configured: Boolean(env.BREVO_API_KEY && env.MAIL_FROM && env.SITE_ORIGIN), supportsAttachments: true }, { headers: { 'Cache-Control': 'no-store', Vary: 'Origin', ...(request.headers.get('origin') === env.SITE_ORIGIN ? { 'Access-Control-Allow-Origin': env.SITE_ORIGIN } : {}) } });
     }
     const allowed = Boolean(env.SITE_ORIGIN && request.headers.get('origin') === env.SITE_ORIGIN);
     const headers = { 'Cache-Control': 'no-store', Vary: 'Origin' };
@@ -25,7 +25,7 @@ export default {
         const { value, done } = await reader.read();
         if (done) break;
         size += value.byteLength;
-        if (size > 20000) { await reader.cancel(); return new Response('Request too large', { status: 413, headers }); }
+        if (size > 9 * 1024 * 1024) { await reader.cancel(); return Response.json({ ok: false, message: '첨부파일 용량을 줄여 다시 전송해 주세요.' }, { status: 413, headers }); }
         parts.push(value);
       }
     }

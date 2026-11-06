@@ -50,6 +50,7 @@ button, input, textarea { font: inherit; }
 .eyebrow { margin: 0 0 18px; font-size: 12px; line-height: 1.2; letter-spacing: .24em; font-weight: 800; color: var(--gold-light); }
 .eyebrow.dark { color: #8d6a34; }
 h1, h2, h3, p { margin-top: 0; }
+h1, h2, h3 { word-break: keep-all; overflow-wrap: break-word; }
 h1 { margin-bottom: 28px; max-width: 760px; font-size: clamp(48px, 6.2vw, 82px); line-height: 1.13; letter-spacing: -.045em; font-weight: 760; }
 .hero-copy { max-width: 640px; font-size: 20px; line-height: 1.75; color: rgba(255,255,255,.8); }
 .hero-values { display: flex; flex-wrap: wrap; gap: 22px; }
@@ -68,6 +69,19 @@ h1 { margin-bottom: 28px; max-width: 760px; font-size: clamp(48px, 6.2vw, 82px);
 .supply-overview > a:hover { background: var(--cream); }
 .supply-overview h3 { margin: 24px 0 16px; font-size: 24px; color: var(--navy); }
 .supply-overview p { color: var(--muted); min-height: 56px; }
+.brands-shortcut { margin: 24px 0 0; text-align: right; }
+.company-overview { margin: 40px 0 0; border-top: 1px solid var(--line); }
+.company-overview > div { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.company-overview dt { color: var(--muted); font-size: 15px; }
+.company-overview dd { margin: 0; color: var(--navy); word-break: keep-all; }
+.inquiry-faq { margin-top: 38px; border-top: 1px solid var(--line); }
+.inquiry-faq details { border-bottom: 1px solid var(--line); }
+.inquiry-faq summary { padding: 22px 8px; color: var(--navy); font-weight: 700; cursor: pointer; word-break: keep-all; }
+.inquiry-faq details[open] { background: var(--cream); }
+.inquiry-faq details p { max-width: 850px; margin: 0; padding: 0 24px 24px; color: #46515b; word-break: keep-all; }
+@media (max-width: 560px) {
+  .company-overview > div { grid-template-columns: 1fr; gap: 5px; padding-block: 16px; }
+}
 .home-service { background: var(--cream); }
 .home-service p { color: var(--muted); }
 .button-gold { background: var(--gold-light); color: var(--navy); }
@@ -113,6 +127,9 @@ h1 { margin-bottom: 28px; max-width: 760px; font-size: clamp(48px, 6.2vw, 82px);
 .brand-list { margin-top: 20px; color: var(--navy); font-weight: 750; }
 .product-detail small { display: block; color: var(--muted); }
 .product-detail > .wire-note { margin: 22px 0 0; color: var(--muted); font-size: 15px; line-height: 1.8; word-break: keep-all; }
+.product-inquiry { display: inline-flex; align-items: center; gap: 18px; min-height: 48px; margin-top: 26px; padding: 10px 18px; border: 1px solid var(--gold); color: var(--navy); font-size: 15px; font-weight: 700; }
+.product-inquiry:hover { background: var(--paper); }
+#quote-form { scroll-margin-top: 110px; }
 
 .audience { display: grid; grid-template-columns: 1.3fr .7fr; gap: 96px; align-items: end; }
 .audience > p { margin: 0; color: var(--muted); font-size: 16px; }
@@ -129,6 +146,8 @@ h1 { margin-bottom: 28px; max-width: 760px; font-size: clamp(48px, 6.2vw, 82px);
 
 .quote { background: var(--white); }
 .quote-layout { display: grid; grid-template-columns: .78fr 1.22fr; gap: 96px; }
+.quote-layout > .quote-form { grid-column: 2; grid-row: 1; }
+.quote-layout > .quote-intro { grid-column: 1; grid-row: 1; }
 .quote-intro > p { margin-top: 26px; color: var(--muted); }
 .contact-list { margin-top: 48px; }
 .contact-list div { display: grid; grid-template-columns: 80px 1fr; gap: 16px; padding: 15px 0; border-top: 1px solid var(--line); }
@@ -149,9 +168,15 @@ h1 { margin-bottom: 28px; max-width: 760px; font-size: clamp(48px, 6.2vw, 82px);
 .required-mark { color: #8b3d26; }
 .field-note { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 400; }
 .quote-status:empty { display: none; }
-.quote-status { padding: 18px; text-align: left; font-size: 14px; border-left: 3px solid var(--gold); background: var(--white); }
+.quote-status { padding: 18px; text-align: left; font-size: 14px; border-left: 3px solid var(--gold); background: var(--white); white-space: pre-line; overflow-wrap: anywhere; }
 .quote-status[data-state="success"] { border-color: #286346; color: #24563d; }
 .quote-status[data-state="error"] { border-color: #9b412c; color: #813624; }
+.attachment-field { padding: 20px 0; margin-bottom: 20px; border-block: 1px solid var(--line); }
+.attachment-field label { margin-bottom: 8px; }
+.optional-label { font-weight: 400; color: var(--muted); }
+.attachment-field input[type="file"] { margin-top: 0; padding: 12px 8px; font-size: 14px; }
+#attachment-selection { white-space: pre-line; overflow-wrap: anywhere; }
+#clear-attachments { margin-top: 10px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); background: var(--white); color: var(--ink); cursor: pointer; }
 .quote-help { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
 .quote-help h3 { font-size: 17px; }
 .quote-help p { color: var(--muted); font-size: 14px; }
@@ -229,6 +254,9 @@ h1 { margin-bottom: 28px; max-width: 760px; font-size: clamp(48px, 6.2vw, 82px);
   .brand-story { grid-column: auto; grid-template-columns: 1fr; gap: 28px; margin-top: 36px; padding: 38px 32px; }
   .brand-story-mark { min-height: 220px; }
   .section-head, .audience, .quote-layout { grid-template-columns: 1fr; gap: 34px; }
+  .quote-layout > .quote-form { grid-column: 1; grid-row: 1; }
+  .quote-layout > .quote-intro { grid-column: 1; grid-row: 2; }
+  .quote.section { padding-top: 36px; }
   .product-row { grid-template-columns: 54px 1fr; }
   .product-detail { grid-column: 2; }
   .process-list { grid-template-columns: 1fr; }
@@ -253,9 +281,13 @@ h1 { margin-bottom: 28px; max-width: 760px; font-size: clamp(48px, 6.2vw, 82px);
   .brand-mark img { width: 62px; }
   .brand-type b { font-size: clamp(17px, 4.2vw, 21px); }
   .brand-type small { display: block; font-size: 13px; margin-top: 4px; }
-  h1 { font-size: 46px; }
-  .hero-content { padding-top: 100px; }
-  .home-page .hero { min-height: max(620px, calc(100svh - 82px)); }
+  h1 { font-size: clamp(30px, 8.2vw, 40px); line-height: 1.28; }
+  .hero-content { padding-block: 64px 100px; }
+  .hero-copy { font-size: 17px; word-break: keep-all; }
+  .subpage-hero { padding-block: 40px; }
+  .subpage-hero h1 { font-size: clamp(30px, 8.2vw, 40px); }
+  .subpage-hero p:last-child { font-size: 16px; word-break: keep-all; }
+  .home-page .hero { min-height: 620px; }
   .hero-foot span:nth-child(3) { display: none; }
   .product-row { grid-template-columns: 1fr; gap: 14px; }
   .product-detail { grid-column: auto; }

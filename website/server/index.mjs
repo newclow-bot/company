@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { handleQuote } from './quote.mjs';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png' };
+const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.xml': 'application/xml; charset=utf-8', '.txt': 'text/plain; charset=utf-8' };
 http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
@@ -13,7 +13,7 @@ http.createServer(async (req, res) => {
       let size = 0; const chunks = [];
       for await (const chunk of req) {
         size += chunk.length;
-        if (size > 20000) { res.writeHead(413); res.end('Request too large'); return; }
+        if (size > 9 * 1024 * 1024) { res.writeHead(413); res.end('Request too large'); return; }
         chunks.push(chunk);
       }
       const request = new Request(new URL('/api/quote', process.env.SITE_ORIGIN || 'http://localhost'), {

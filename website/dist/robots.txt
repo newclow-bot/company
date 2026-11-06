@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://qualbridge.newclow.chatgpt.site/sitemap.xml
